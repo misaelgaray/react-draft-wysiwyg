@@ -1,5 +1,5 @@
 {
-  "name": "react-draft-wysiwyg",
+  "name": "react-draft-wysiwyg-image-support",
   "version": "1.15.0",
   "description": "A wysiwyg on top of DraftJS.",
   "main": "dist/react-draft-wysiwyg.js",
