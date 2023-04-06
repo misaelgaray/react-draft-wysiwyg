@@ -329,6 +329,8 @@ class WysiwygEditor extends Component {
       'customDecorators',
       'handlePastedText',
       'customStyleMap',
+      'handleDroppedFiles',
+      'handlePastedFiles',
     ]);
 
   getStyleMap = props => ({ ...getCustomStyleMap(), ...props.customStyleMap });
@@ -391,6 +393,37 @@ class WysiwygEditor extends Component {
     }
     if (!stripPastedStyles) {
       return handlePastedText(text, html, editorState, this.onChange);
+    }
+    return false;
+  };
+  
+  /**
+   * @param files  Array<Blob>
+   * */
+  handlePastedFilesFn = (files) => {
+    const { editorState } = this.state;
+    const {
+      handlePastedFiles: handlePastedFilesProp,
+    } = this.props;
+
+    if (handlePastedFilesProp) {
+      return handlePastedFilesProp(files, editorState, this.onChange);
+    }
+    return false;
+  };
+
+  /**
+   * @param files  Array<Blob>
+   * @param selection  SelectionState
+   * */
+  handleDroppedFilesFn = (selection, files) => {
+    const { editorState } = this.state;
+    const {
+      handleDroppedFiles: handleDroppedFilesProp,
+    } = this.props;
+
+    if (handleDroppedFilesProp) {
+      return handleDroppedFilesProp(selection, files, editorState, this.onChange);
     }
     return false;
   };
@@ -492,6 +525,8 @@ class WysiwygEditor extends Component {
             handlePastedText={this.handlePastedTextFn}
             blockRendererFn={this.blockRendererFn}
             handleKeyCommand={this.handleKeyCommand}
+            handlePastedFiles={this.handlePastedFilesFn}
+            handleDroppedFiles={this.handleDroppedFilesFn}
             ariaLabel={ariaLabel || 'rdw-editor'}
             blockRenderMap={blockRenderMap}
             {...this.editorProps}
@@ -548,6 +583,8 @@ WysiwygEditor.propTypes = {
   customDecorators: PropTypes.array,
   editorRef: PropTypes.func,
   handlePastedText: PropTypes.func,
+  handlePastedFiles: PropTypes.func,
+  handleDroppedFiles: PropTypes.func,
 };
 
 WysiwygEditor.defaultProps = {
